@@ -142,6 +142,11 @@ If nil, always wrap the region."
 (defvar wrap-region-table (make-hash-table :test 'equal)
   "Table with wrapper pairs.")
 
+(defune wrap-region (key)
+  "Wrap the selected text with KEY char."
+  (interactive "cWrap with char:")
+  (wrap-region-trigger 1 (char-to-string )))
+
 (defun wrap-region-trigger (arg key)
   "Called when trigger key is pressed."
   (let* ((wrapper (wrap-region-find key)))
@@ -153,7 +158,7 @@ If nil, always wrap the region."
           (wrap-region-with-punctuations
            (wrap-region-wrapper-left wrapper)
            (wrap-region-wrapper-right wrapper)))
-      (wrap-region-fallback key))))
+      (wrap-region-with key key))))
 
 (defun wrap-region-find (key)
   "Find first wrapper with trigger KEY that should be active in MAJOR-MODE."
@@ -265,8 +270,7 @@ mode or multiple modes that the wrapper should trigger in."
                     (setq wrappers (delete wrapper-same-trigger wrappers)))))
               (puthash key (cons new-wrapper wrappers) wrap-region-table))))
       (let ((new-wrapper (make-wrap-region-wrapper :key key :left left :right right :modes modes)))
-        (puthash key (list new-wrapper) wrap-region-table))))
-  (wrap-region-define-trigger key))
+        (puthash key (list new-wrapper) wrap-region-table)))))
 
 (defun wrap-region-remove-wrapper (key &optional mode-or-modes)
   "Remove wrapper with trigger KEY or exclude from MODE-OR-MODES.
