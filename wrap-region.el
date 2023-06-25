@@ -142,10 +142,10 @@ If nil, always wrap the region."
 (defvar wrap-region-table (make-hash-table :test 'equal)
   "Table with wrapper pairs.")
 
-(defune wrap-region (key)
+(defun wrap-region (key)
   "Wrap the selected text with KEY char."
-  (interactive "cWrap with char:")
-  (wrap-region-trigger 1 (char-to-string )))
+  (interactive "Wrap with char:")
+  (wrap-region-trigger 1 (char-to-string key)))
 
 (defun wrap-region-trigger (arg key)
   "Called when trigger key is pressed."
